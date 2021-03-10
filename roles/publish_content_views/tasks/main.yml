@@ -1,0 +1,23 @@
+---
+
+- name: Publish content views
+  shell: hammer content-view publish --id {{ item }} --description {{ ansible_date_time.date }}
+  args:
+    executable: /bin/bash
+  with_items: "{{ CV_IDS.stdout_lines }}"
+  become: yes
+  tags: publish
+  
+- name: Get published content views version
+  shell: hammer --no-headers --csv content-view version list --content-view-id {{ item }} | head -1 | cut -d, -f1
+  args:
+    executable: /bin/bash
+  with_items: "{{ CV_IDS.stdout_lines }}"
+  register: VERSION_ID
+  become: yes
+  
+- name: Populate CV_ID and VER in fact array
+  set_fact:
+    CV_VER: "{{ CV_VER|default([]) + [ {'cv': item.item, 'ver': item.stdout} ] }}"
+  loop: "{{ VERSION_ID.results }}"
+  no_log: true

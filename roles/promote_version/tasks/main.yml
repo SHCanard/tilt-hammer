@@ -1,0 +1,11 @@
+---
+  
+- name: Promote content views for RHEL Testing
+  shell: hammer content-view version promote --organization-id 1 --content-view-id {{ item.cv }} --id {{ item.ver }} --to-lifecycle-environment Testing
+  args:
+    executable: /bin/bash
+  with_items: "{{ CV_VER }}"
+  when:
+    - item.ver is defined
+    - item.ver != ''
+  become: yes

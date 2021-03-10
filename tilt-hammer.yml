@@ -1,0 +1,10 @@
+---
+
+- name: Tilt hammer
+  hosts: satellite.mydomain.com
+  user: root
+
+  roles:
+    - get_content_views
+    - publish_content_views
+    - promote_version

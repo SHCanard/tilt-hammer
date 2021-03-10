@@ -1,0 +1,8 @@
+---
+
+- name: Get content views
+  shell: hammer --no-headers --csv content-view list | grep -v Default | cut -d, -f1
+  args:
+    executable: /bin/bash
+  register: CV_IDS
+  become: yes
